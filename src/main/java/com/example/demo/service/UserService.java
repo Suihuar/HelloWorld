@@ -1,5 +1,6 @@
 package com.example.demo.service;
 import java.util.List;
+import java.util.Objects;
 
 import com.example.demo.entity.User;
 import com.example.demo.repo.UserRepository;
@@ -24,5 +25,12 @@ public class UserService {
     }
     public void delete(Integer id) {
         repo.deleteById(id);
+    }
+    public Boolean login(String email, String password) {
+        User user = repo.findByEmail(email);
+        if (user != null && Objects.equals(password, user.getPassword())) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,16 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserLogin;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MVCController {
@@ -30,7 +28,7 @@ public class MVCController {
 
 
     @GetMapping("/register")
-    public String showForm(Model model) {
+    public String showRegisterForm(Model model) {
         User user = new User();
         String[] professionList = new String[3];
         professionList[0] = "Developer";
@@ -41,9 +39,33 @@ public class MVCController {
         return "register_form";
     }
 
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        UserLogin userLogin = new UserLogin();
+        model.addAttribute("userLogin", userLogin);
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String submitLoginForm(@Valid @ModelAttribute UserLogin userLogin, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("SB");
+            model.addAttribute("userLogin", userLogin);
+            return "login";
+        } else {
+            System.out.println(userService.login(userLogin.getEmail(), userLogin.getPassword()));
+            if (userService.login(userLogin.getEmail(), userLogin.getPassword())) {
+                model.addAttribute("userLogin", userLogin);
+                return "chatroom";
+            } else {
+                model.addAttribute("error", "Invalid email or password");
+                return "login";
+            }
+        }
+    }
+
     @PostMapping("/register")
-    public String submitForm(@Valid @ModelAttribute User user, BindingResult
-            bindingResult, Model model) {
+    public String submitRegisterForm(@Valid @ModelAttribute User user, BindingResult bindingResult, Model model) {
         System.out.println(user); // the user information is displayed in the console
         if (bindingResult.hasErrors()) {
             String[] professionList = new String[3];
@@ -56,7 +78,7 @@ public class MVCController {
         } else {
             model.addAttribute("user", user);
             userService.save(user);
-            return "register_success";
+            return "login";
         }
     }
 }
