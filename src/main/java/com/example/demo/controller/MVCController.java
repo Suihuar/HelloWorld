@@ -27,12 +27,7 @@ public class MVCController {
         System.out.println("Going home..."); // appear in the console
         return "index";
     }
-    // more methods later
-//    @RequestMapping("/register")
-//    public String register() {
-//        System.out.println("Going home...");
-//        return "register";
-//    }
+
 
     @GetMapping("/register")
     public String showForm(Model model) {
@@ -60,6 +55,7 @@ public class MVCController {
             return "register_form";
         } else {
             model.addAttribute("user", user);
+            userService.save(user);
             return "register_success";
         }
     }

@@ -34,7 +34,6 @@ public class User {
     private String note;
     private Date birthday;
 
-    @AssertFalse
     private boolean married;
     // getters and setters...
     public String getName() { return name; }

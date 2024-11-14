@@ -51,7 +51,8 @@
             <form:errors path="password" cssClass="error" /><br/>
 
             <form:label path="birthday">Birthday (yyyy-mm-dd):</form:label>
-            <input type="date" th:field="*{birthday}" />
+            <form:input path="birthday" type="date" />
+<%--            <input type="date" th:field="*{birthday}" />--%>
             <form:errors path="birthday" cssClass="error" /><br/>
 
             <form:label path="gender">Gender:</form:label>
